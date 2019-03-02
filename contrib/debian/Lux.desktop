@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Spider
+Comment=Spider P2P Cryptocurrency
+Exec=spdr-qt %u
+Terminal=false
+Type=Application
+Icon=spdr128
+MimeType=x-scheme-handler/spdr;
+Categories=Office;Finance;
+Name[en_AU]=Spider

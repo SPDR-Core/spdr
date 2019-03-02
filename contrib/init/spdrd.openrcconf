@@ -1,0 +1,26 @@
+# /etc/conf.d/spdrd: config file for /etc/init.d/spdrd
+
+# Config file location
+#BITCOIND_CONFIGFILE="/etc/spdr/spdr.conf"
+
+# What directory to write pidfile to?  (created and owned by $BITCOIND_USER)
+#BITCOIND_PIDDIR="/var/run/spdrd"
+
+# What filename to give the pidfile
+#BITCOIND_PIDFILE="${BITCOIND_PIDDIR}/spdrd.pid"
+
+# Where to write spdrd data (be mindful that the blockchain is large)
+#BITCOIND_DATADIR="/var/lib/spdrd"
+
+# User and group to own spdrd process
+#BITCOIND_USER="spdr"
+#BITCOIND_GROUP="spdr"
+
+# Path to spdrd executable
+#BITCOIND_BIN="/usr/bin/spdrd"
+
+# Nice value to run spdrd under
+#BITCOIND_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+BITCOIND_OPTS=""

@@ -1,0 +1,18 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource prefix="/translations">
+        <file alias="ca">locale/spdr_ca.qm</file>
+        <file alias="da">locale/spdr_da.qm</file>
+        <file alias="de">locale/spdr_de.qm</file>
+        <file alias="en">locale/spdr_en.qm</file>
+        <file alias="en_US">locale/spdr_en_US.qm</file>
+        <file alias="es">locale/spdr_es.qm</file>
+        <file alias="fr">locale/spdr_fr.qm</file>
+        <file alias="it">locale/spdr_it.qm</file>
+        <file alias="ja">locale/spdr_ja.qm</file>
+        <file alias="pt">locale/spdr_pt.qm</file>
+        <file alias="ro_RO">locale/spdr_ro_RO.qm</file>
+        <file alias="ru">locale/spdr_ru.qm</file>
+        <file alias="vn">locale/spdr_vn.qm</file>
+        <file alias="zh_TW">locale/spdr_zh_TW.qm</file>
+    </qresource>
+</RCC>
