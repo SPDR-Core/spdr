@@ -191,18 +191,6 @@ public:
         genesis.hashStateRoot = uint256(h256Touint(dev::h256("e965ffd002cd6ad0e2dc402b8044de833e06b23127ea8c3d80aec91410771495"))); // spdr
         genesis.hashUTXORoot = uint256(h256Touint(dev::sha3(dev::rlp("")))); // spdr
 
-    //gen genesis ++ 
-     /*  while (!CheckProof(genesis.GetHash(), genesis.nBits)) {
-           genesis.nNonce ++;
-        }
-        std::cout << "START GEN" << std::endl;
-        std::cout << genesis.nNonce << std::endl;
-        std::cout << genesis.GetHash().GetHex() << std::endl;
-        std::cout << genesis.hashMerkleRoot.GetHex() << std::endl;
-        std::cout << "STOP GEN" << std::endl;
-        return;  
-    //gen genesis --*/
-
         consensus.hashGenesisBlock = genesis.GetHash();
 
         assert(consensus.hashGenesisBlock == uint256("00000d90d506a5da500e0101c910c0618d72d9afd283b0304f843ccb73b25da4"));
