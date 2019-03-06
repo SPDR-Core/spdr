@@ -5,7 +5,7 @@
 [![HitCount](http://hits.dwyl.io/216k155/spdr.svg)](http://hits.dwyl.io/216k155/spdr)
 <a href="https://discord.gg/vqzqWJg"><img src="https://discordapp.com/api/guilds/518071066678263815/widget.png" alt="Discord server" /></a> <a href="https://twitter.com/intent/follow?screen_name=SPDRCOIN"><img src="https://img.shields.io/twitter/follow/SPDRCOIN.svg?style=social&logo=twitter" alt="follow on Twitter"></a>
                                                                                                                                                      
-[Website](https://spidervps.net) — [Block Explorer](http://explorer.spidervps.net/) — [Forum](https://bitcointalk.org/index.php?topic=) — [Twitter](https://twitter.com/SPDRCOIN)
+[Website](https://spidervps.net) — [Block Explorer](http://explorer.spidervps.net/) — [Forum](https://bitcointalk.org/index.php?topic=5116197) — [Twitter](https://twitter.com/SPDRCOIN)
 
 
 =============
