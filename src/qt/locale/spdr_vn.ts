@@ -9205,7 +9205,11 @@ https://www.transifex.com/spdrcore/spdrcore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Copyright (C) 2017-%i The SPDR-Core Developers</source>
+        <source>Copyright (C) 2015-%i The Luxcore Developers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copyright (C) %i The Spidercore Developers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

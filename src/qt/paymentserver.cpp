@@ -1,5 +1,6 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
-// Copyright (c) 2017 The spdr developers
+// Copyright (c) 2015-2018 The Luxcore developers
+// Copyright (c) 2019 The Spidercore developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
