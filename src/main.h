@@ -94,14 +94,14 @@ struct CNodeStateStats;
 #endif
 
 #ifndef WORKING_VERSION
-#define WORKING_VERSION "/Spidercore:1.0.0/"
+#define WORKING_VERSION "/Spidercore:1.1.0/"
 #endif
 
 static const int64_t DARKSEND_COLLATERAL = (7000*COIN); //7000 SPDR
 static const int64_t DARKSEND_FEE = (0.002*COIN); // reward masternode
 static const int64_t DARKSEND_POOL_MAX = (1999999.99*COIN);
 
-static const int nSpiderProtocolSwitchHeight = 58000000;
+static const int nSpiderProtocolSwitchHeight = 45000;
 
 /** The maximum size for mined blocks */
 static const unsigned int MAX_BLOCK_SIZE_GEN = MAX_BLOCK_BASE_SIZE/2;
@@ -201,7 +201,10 @@ void updateBlockSizeParams(unsigned int newBlockSize);
 
 inline bool IsProtocolV2(int nHeight) { return IsTestNet() || nHeight > 0; }
 inline int64_t GetMNCollateral(int nHeight) {
-    return 7000;
+    if(nHeight < 133000)
+        return 7000;
+
+    return 15000;
 }
 
 struct BlockHasher {

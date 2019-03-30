@@ -1914,12 +1914,12 @@ CAmount GetProofOfWorkReward(int64_t nFees, int nHeight)
     }else if (nHeight < 133000) {
         nSubsidy = 35 * COIN;
     }else if (nHeight < 193000) {
-        nSubsidy = 30 * COIN;
+        nSubsidy = 15 * COIN;
     }else if (nHeight < 263000) {
-        nSubsidy = 25 * COIN;
+        nSubsidy = 13 * COIN;
     }
     if(nHeight >= 263000){
-       nSubsidy = 20 * COIN; 
+       nSubsidy = 10 * COIN; 
     }
 
     return nSubsidy + nFees;
@@ -1944,12 +1944,12 @@ CAmount GetProofOfStakeReward(int64_t nFees, int nHeight)
     }else if (nHeight < 133000) {
         nSubsidy = 7 * COIN;
     }else if (nHeight < 193000) {
-        nSubsidy = 6 * COIN;
+        nSubsidy = 4 * COIN;
     }else if (nHeight < 263000) {
         nSubsidy = 5 * COIN;
     }
     if(nHeight >= 263000){
-       nSubsidy = 4 * COIN; 
+       nSubsidy = 2 * COIN; 
     }
 
     return nSubsidy + nFees;

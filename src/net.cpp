@@ -1402,7 +1402,7 @@ void ThreadOpenConnections() {
         boost::this_thread::interruption_point();
 
         // Add seed nodes if DNS seeds are all down (an infrastructure attack?).
-        if (addrman.size() == 0 && (GetTime() - nStart > 60)) {
+        if (addrman.size() == 0 && (GetTime() - nStart > 10)) {
             static bool done = false;
             if (!done) {
                 LogPrintf("Adding fixed seed nodes as DNS doesn't seem to be available.\n");
@@ -1541,10 +1541,6 @@ void ThreadOpenAddedConnections()
         LOCK(cs_vAddedNodes);
         vAddedNodes = mapMultiArgs["-addnode"];
     }
-    vAddedNodes.push_back("157.230.109.152");  // Some fixed noodes
-    vAddedNodes.push_back("157.230.107.178");
-    vAddedNodes.push_back("68.183.37.118");
-    vAddedNodes.push_back("134.209.100.191");
     for (unsigned int i = 0; true; i++)
     {
         std::vector<AddedNodeInfo> vInfo = GetAddedNodeInfo();
@@ -1558,7 +1554,7 @@ void ThreadOpenAddedConnections()
                 MilliSleep(500);
             }
         }
-        MilliSleep(120000); // Retry every 2 minutes
+        MilliSleep(30000); // Retry every 30 sec
     }
 }
 
@@ -1852,7 +1848,7 @@ void StartNode(boost::thread_group& threadGroup, CScheduler& scheduler) {
     // Start threads
     //
 
-    if (!GetBoolArg("-dnsseed", true))
+    if (!GetBoolArg("-dnsseed", false))
         LogPrintf("DNS seeding disabled\n");
     else
         threadGroup.create_thread(boost::bind(&TraceThread<void (*)()>, "dnsseed", &ThreadDNSAddressSeed));

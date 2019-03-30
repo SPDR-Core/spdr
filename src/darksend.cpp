@@ -767,12 +767,11 @@ void CDarkSendPool::ChargeRandomFees() {
 
             /*
                 Collateral Fee Charges:
-
                 Being that DarkSend has "no fees" we need to have some kind of cost associated
                 with using it to stop abuse. Otherwise it could serve as an attack vector and
-                allow endless transaction that would bloat Spider and make it unusable. To
+                allow endless transaction that would bloat SPDR and make it unusable. To
                 stop these kinds of attacks 1 in 50 successful transactions are charged. This
-                adds up to a cost of 0.002Spider per transaction on average.
+                adds up to a cost of 0.002 SPDR per transaction on average.
             */
             if (r <= 20) {
                 LogPrintf("CDarkSendPool::ChargeRandomFees -- charging random fees. %u\n", i);
@@ -1476,8 +1475,8 @@ bool CDarkSendPool::DoAutomaticDenominating(bool fDryRun, bool ready) {
         //randomize the amounts we mix
         if (sessionTotalValue > nBalanceNeedsAnonymized) sessionTotalValue = nBalanceNeedsAnonymized;
 
-        double fSpiderSubmitted = (sessionTotalValue / CENT);
-        LogPrintf("Submitting Darksend for %f Spider CENT - sessionTotalValue %d\n", fSpiderSubmitted, sessionTotalValue);
+        double fSPDRSubmitted = (sessionTotalValue / CENT);
+        LogPrintf("Submitting Darksend for %f SPDR CENT - sessionTotalValue %d\n", fSPDRSubmitted, sessionTotalValue);
 
         if (pwalletMain->GetDenominatedBalance(true, true) > 0) { //get denominated unconfirmed inputs
             LogPrintf("DoAutomaticDenominating -- Found unconfirmed denominated outputs, will wait till they confirm to continue.\n");
@@ -1653,10 +1652,11 @@ bool CDarkSendPool::SendRandomPaymentToSelf() {
     CWalletTx wtx;
     int64_t nFeeRet = 0;
     std::string strFail = "";
-    vector< pair<CScript, int64_t> > vecSend;
+    std::vector<CRecipient> vecSend;
 
     // ****** Add fees ************ /
-    vecSend.push_back(make_pair(scriptDenom, nPayment));
+    CRecipient recipient = {scriptDenom, nPayment, false};
+    vecSend.push_back(recipient);
 
     CCoinControl* coinControl = NULL;
     int nChangePos = -1;
@@ -1688,10 +1688,10 @@ bool CDarkSendPool::MakeCollateralAmounts() {
     CWalletTx wtx;
     int64_t nFeeRet = 0;
     std::string strFail = "";
-    vector< pair<CScript, int64_t> > vecSend;
+    std::vector<CRecipient> vecSend;
 
-    vecSend.push_back(make_pair(scriptChange, (DARKSEND_COLLATERAL * 2) + DARKSEND_FEE));
-    vecSend.push_back(make_pair(scriptChange, (DARKSEND_COLLATERAL * 2) + DARKSEND_FEE));
+    CRecipient recipient = {scriptChange, (DARKSEND_COLLATERAL * 2) + DARKSEND_FEE, false};
+    vecSend.push_back(recipient);
 
     CCoinControl* coinControl = NULL;
     int nChangePos = -1;
@@ -1732,15 +1732,13 @@ bool CDarkSendPool::CreateDenominated(int64_t nTotalValue) {
     CWalletTx wtx;
     int64_t nFeeRet = 0;
     std::string strFail = "";
-    vector< pair<CScript, int64_t> > vecSend;
+    std::vector<CRecipient> vecSend;
     int64_t nValueLeft = nTotalValue;
 
     // ****** Add collateral outputs ************ /
     if (!pwalletMain->HasCollateralInputs()) {
-        vecSend.push_back(make_pair(scriptChange, (DARKSEND_COLLATERAL * 2) + DARKSEND_FEE));
-        nValueLeft -= (DARKSEND_COLLATERAL * 2) + DARKSEND_FEE;
-        vecSend.push_back(make_pair(scriptChange, (DARKSEND_COLLATERAL * 2) + DARKSEND_FEE));
-        nValueLeft -= (DARKSEND_COLLATERAL * 2) + DARKSEND_FEE;
+        CRecipient recipient = {scriptChange, (DARKSEND_COLLATERAL * 2) + DARKSEND_FEE, false};
+        vecSend.push_back(recipient);
     }
 
     // ****** Add denoms ************ /
@@ -1756,7 +1754,8 @@ bool CDarkSendPool::CreateDenominated(int64_t nTotalValue) {
             scriptChange = GetScriptForDestination(vchPubKey.GetID());
             reservekey.KeepKey();
 
-            vecSend.push_back(make_pair(scriptChange, v));
+            CRecipient recipient = {scriptChange, v, false};
+            vecSend.push_back(recipient);
 
             //increment outputs and subtract denomination amount
             nOutputs++;
@@ -1854,10 +1853,10 @@ bool CDarkSendPool::IsCompatibleWithSession(int64_t nDenom, CTransaction txColla
 void CDarkSendPool::GetDenominationsToString(int nDenom, std::string& strDenom) {
     // Function returns as follows:
     //
-    // bit 0 - 100Spider+1 ( bit on if present )
-    // bit 1 - 10Spider+1
-    // bit 2 - 1Spider+1
-    // bit 3 - .1Spider+1
+    // bit 0 - 100SPDR+1 ( bit on if present )
+    // bit 1 - 10SPDR+1
+    // bit 2 - 1SPDR+1
+    // bit 3 - .1SPDR+1
     // bit 3 - non-denom
 
 
@@ -1913,10 +1912,10 @@ int CDarkSendPool::GetDenominations(const std::vector<CTxOut>& vout) {
 
     // Function returns as follows:
     //
-    // bit 0 - 100Spider+1 ( bit on if present )
-    // bit 1 - 10Spider+1
-    // bit 2 - 1Spider+1
-    // bit 3 - .1Spider+1
+    // bit 0 - 100SPDR+1 ( bit on if present )
+    // bit 1 - 10SPDR+1
+    // bit 2 - 1SPDR+1
+    // bit 3 - .1SPDR+1
 
     return denom;
 }
@@ -2103,7 +2102,7 @@ bool CDarksendQueue::CheckSignature() {
 //TODO: Rename/move to core
 void ThreadCheckDarkSendPool() {
     // Make this thread recognisable as the wallet flushing thread
-    RenameThread("Spider-darksend");
+    RenameThread("SPDR-darksend");
 
     unsigned int c = 0;
     std::string errorMessage;

@@ -604,8 +604,40 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
         // Create empty spdr.conf if it does not exist
         FILE* configFile = fopen(GetConfigFile().string().c_str(), "a");
         if (configFile != NULL)
+        {
+            std::string strHeader = "# Spider Core config file\n"
+                                    "addnode=157.230.109.152\n"
+                                    "addnode=157.230.107.178\n"
+                                    "addnode=68.183.37.118\n"
+                                    "addnode=45.77.14.2:53617\n"
+                                    "addnode=18.222.121.12:53617\n"
+                                    "addnode=45.77.14.3:53617\n"
+                                    "addnode=217.61.61.115:53617\n"
+                                    "addnode=149.28.145.149:53617\n"
+                                    "addnode=45.77.14.4:53617\n"
+                                    "addnode=51.77.92.54:53617\n"
+                                    "addnode=157.230.109.152:53617\n"
+                                    "addnode=45.77.14.5:53617\n"
+                                    "addnode=139.180.128.130:53617\n"
+                                    "addnode=89.36.217.169:53617\n"
+                                    "addnode=13.59.195.118:53617\n"
+                                    "addnode=45.77.14.6:53617\n"
+                                    "addnode=157.230.232.195:53617\n"
+                                    "addnode=104.248.242.190:53617\n"
+                                    "addnode=66.42.62.89:53617\n"
+                                    "addnode=85.105.82.251:53617\n"
+                                    "addnode=185.195.27.167:53617\n"
+                                    "addnode=185.195.26.9:53617\n"
+                                    "addnode=86.105.50.153:53617\n"
+                                    "addnode=185.195.26.94:53617\n"
+                                    "addnode=148.251.25.225:53617\n"
+                                    "addnode=134.209.100.191";
+            fwrite(strHeader.c_str(), std::strlen(strHeader.c_str()), 1, configFile);
             fclose(configFile);
-        return; // Nothing to read, so just return
+            streamConfig.open(GetConfigFile());
+        }
+            
+        //return; // Nothing to read, so just return
     }
 
     set<string> setOptions;

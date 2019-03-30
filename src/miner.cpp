@@ -1139,10 +1139,6 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
     CReserveKey reservekey(pwallet);
     unsigned int nExtraNonce = 0;
 
-    //control the amount of times the client will check for mintable coins
-    static bool fMintableCoins = false;
-    static int nMintableLastCheck = 0;
-
 
     while (fGenerateBitcoins || fProofOfStake) {
 

@@ -150,11 +150,11 @@ BitcoinGUI::BitcoinGUI(const PlatformStyle *platformStyle, const NetworkStyle* n
 {
     /* Open CSS when configured */
     this->setStyleSheet(GUIUtil::loadStyleSheet());
-    resize(1200, 750);
+    resize(1200, 700);
     QString windowTitle = tr("Spidercore") + " - ";
 
 #ifdef ENABLE_UPDATER
-    controller = new QtSpiderUpdater::UpdateController(QStringLiteral("v5.3.0"), this);
+    controller = new QtSpiderUpdater::UpdateController(QStringLiteral("v1.1.0"), this);
     controller->setDetailedUpdateInfo(true);
 #endif
 
