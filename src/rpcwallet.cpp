@@ -1505,7 +1505,7 @@ static void MaybePushAddress(UniValue & entry, const CTxDestination &dest)
 
 void ListTransactions(const CWalletTx& wtx, const string& strAccount, int nMinDepth, bool fLong, UniValue& ret, const isminefilter& filter)
 {
-    CAmount nFee;
+CAmount nFee;
     string strSentAccount;
     list<COutputEntry> listReceived;
     list<COutputEntry> listSent;
@@ -1526,24 +1526,16 @@ void ListTransactions(const CWalletTx& wtx, const string& strAccount, int nMinDe
             std::map<std::string, std::string>::const_iterator it = wtx.mapValue.find("DS");
             entry.push_back(Pair("category", (it != wtx.mapValue.end() && it->second == "1") ? "darksent" : "send"));
             entry.push_back(Pair("amount", ValueFromAmount(-s.amount)));
-            if (pwalletMain->mapAddressBook.count(s.destination)) {
-                entry.push_back(Pair("label", pwalletMain->mapAddressBook[s.destination].name));
-            }
             entry.push_back(Pair("vout", s.vout));
-            if (!wtx.IsCoinStake())
-                entry.push_back(Pair("fee", ValueFromAmount(-nFee)));
-            else if (s.amount == 0 && s.vout == 0)
-                continue;
+            entry.push_back(Pair("fee", ValueFromAmount(-nFee)));
             if (fLong)
                 WalletTxToJSON(wtx, entry);
-            entry.push_back(Pair("abandoned", wtx.isAbandoned()));
             ret.push_back(entry);
         }
     }
 
     // Received
     if (listReceived.size() > 0 && wtx.GetDepthInMainChain() >= nMinDepth) {
-        bool stop = false;
         for (const COutputEntry& r : listReceived) {
             string account;
             if (pwalletMain->mapAddressBook.count(r.destination))
@@ -1554,7 +1546,7 @@ void ListTransactions(const CWalletTx& wtx, const string& strAccount, int nMinDe
                     entry.push_back(Pair("involvesWatchonly", true));
                 entry.push_back(Pair("account", account));
                 MaybePushAddress(entry, r.destination);
-                if (wtx.IsCoinGenerated()) {
+                if (wtx.IsCoinBase()) {
                     if (wtx.GetDepthInMainChain() < 1)
                         entry.push_back(Pair("category", "orphan"));
                     else if (wtx.GetBlocksToMaturity() > 0)
@@ -1564,21 +1556,11 @@ void ListTransactions(const CWalletTx& wtx, const string& strAccount, int nMinDe
                 } else {
                     entry.push_back(Pair("category", "receive"));
                 }
-
                 entry.push_back(Pair("amount", ValueFromAmount(r.amount)));
-                if (wtx.IsCoinStake())
-                {
-                    stop = true;
-                }
-                if (pwalletMain->mapAddressBook.count(r.destination)) {
-                    entry.push_back(Pair("label", account));
-                }
                 entry.push_back(Pair("vout", r.vout));
                 if (fLong)
                     WalletTxToJSON(wtx, entry);
                 ret.push_back(entry);
-                if (stop)
-                    break;
             }
         }
     }

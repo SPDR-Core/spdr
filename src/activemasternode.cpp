@@ -108,6 +108,28 @@ void CActiveMasternode::ManageStatus() {
     }
 }
 
+std::string CActiveMasternode::GetStatus()
+{
+    switch (status) {
+    case MASTERNODE_NOT_PROCESSED:
+        return "Node just started, not yet activated";
+    case MASTERNODE_SYNC_IN_PROCESS:
+        return "Sync in progress. Must wait until sync is complete to start Masternode";
+    case MASTERNODE_INPUT_TOO_NEW:
+        return strprintf("Masternode input must have at least %d confirmations", MASTERNODE_MIN_CONFIRMATIONS);
+    case MASTERNODE_NOT_CAPABLE:
+        return "Not capable masternode: " + notCapableReason;
+    case MASTERNODE_IS_CAPABLE:
+        return "Masternode successfully started";
+    case MASTERNODE_REMOTELY_ENABLED:
+        return "Masternode successfully started";
+    case MASTERNODE_STOPPED:
+        return "Masternode is stopped";   
+    default:
+        return "unknown";
+    }
+}
+
 // Send stop dseep to network for remote masternode
 bool CActiveMasternode::StopMasterNode(std::string strService, std::string strKeyMasternode, std::string& errorMessage) {
     CTxIn vin;
