@@ -463,7 +463,7 @@ std::string HelpMessage(HelpMessageMode mode)
 
 #ifdef ENABLE_WALLET
     strUsage += HelpMessageGroup(_("Wallet options:"));
-    strUsage += HelpMessageOpt("-createwalletbackups=<n>", _("Number of automatic wallet backups (default: 10)"));
+    strUsage += HelpMessageOpt("-createwalletbackups=<n>", _("Number of automatic wallet backups (default: 20)"));
     strUsage += HelpMessageOpt("-disablewallet", _("Do not load the wallet and disable wallet RPC calls"));
     strUsage += HelpMessageOpt("-keypool=<n>", strprintf(_("Set key pool size to <n> (default: %u)"), 100));
     if (GetBoolArg("-help-debug", false))
@@ -1337,7 +1337,7 @@ bool AppInit2()
             filesystem::create_directories(backupDir);
         }
 
-        nWalletBackups = GetArg("-createwalletbackups", 10);
+        nWalletBackups = GetArg("-createwalletbackups", 20);
         nWalletBackups = std::max(0, std::min(10, nWalletBackups));
 
         if (nWalletBackups > 0 && filesystem::exists(backupDir))

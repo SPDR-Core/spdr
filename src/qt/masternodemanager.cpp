@@ -32,6 +32,7 @@ using namespace std;
 #include <QScrollBar>
 #include <QMessageBox>
 
+
 MasternodeManager::MasternodeManager(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MasternodeManager),
@@ -47,10 +48,16 @@ MasternodeManager::MasternodeManager(QWidget *parent) :
     //ui->copyAddressButton->setEnabled(false);
 
     subscribeToCoreSignals();
-    ui->tabWidget->removeTab(1);
+    ui->tabWidget->removeTab(2);
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateNodeList()));
     timer->start(1000);
+
+    //FR
+    timer2 = new QTimer(this);
+    connect(timer2, SIGNAL(timeout()), this, SLOT(updateMYNodeList()));
+    timer2->start(1000);
+
     fFilterUpdated = true;
     nTimeFilterUpdated = GetTime();
 }
@@ -129,6 +136,7 @@ void MasternodeManager::updateSpiderNode(QString alias, QString addr, QString pr
     ui->tableWidget_2->setItem(nodeRow, 3, collateralItem);
 }
 
+
 static QString seconds_to_DHMS(quint32 duration)
 {
   QString res;
@@ -193,6 +201,68 @@ void MasternodeManager::updateNodeList()
             updateSpiderNode(QString::fromStdString(adrenaline.second.sAlias), QString::fromStdString(adrenaline.second.sAddress), QString::fromStdString(adrenaline.second.sMasternodePrivKey), QString::fromStdString(adrenaline.second.sCollateralAddress));
         }
     }
+}
+
+//FR
+void MasternodeManager::updateMYNodeList()
+{
+    TRY_LOCK(cs_masternodes, lockMasternodes);
+    if(!lockMasternodes)
+        return;
+
+    ui->myCountTable->setText("Updating...");
+    ui->tableWidgetMy->clearContents();
+    ui->tableWidgetMy->setRowCount(0);
+
+
+    //get here array with my masternodes
+
+    for (CMasternodeConfig::CMasternodeEntry mne : masternodeConfig.getEntries()) {
+        if (ShutdownRequested()) return;
+    ui->tableWidgetMy->insertRow(0);
+    int nIndex = 0;
+    int mnRow = 0;
+    nIndex = std::stoi(mne.getOutputIndex());  
+    CTxIn vin = CTxIn(uint256(mne.getTxHash()), uint32_t(nIndex));
+    int mnIndex = GetMasternodeByVin(vin);
+
+    QTableWidgetItem *alias = new QTableWidgetItem(QString::fromStdString(mne.getAlias())); 
+    QTableWidgetItem *activeItem = new QTableWidgetItem(tr("no")); 
+    QTableWidgetItem *addressItem = new QTableWidgetItem(QString::fromStdString(mne.getIp()));
+    QTableWidgetItem *rankItem = new QTableWidgetItem(QString::number(0));
+    QTableWidgetItem *activeSecondsItem = new QTableWidgetItem(seconds_to_DHMS((qint64)(0))); 
+    QTableWidgetItem *lastSeenItem = new QTableWidgetItem(QString::fromStdString(DateTimeStrFormat("%Y-%m-%d %H:%M:%S",0)));
+    QTableWidgetItem *pubkeyItem = new QTableWidgetItem(QString::fromStdString("")); 
+    if(mnIndex != -1)
+    {
+       CMasterNode mn =  vecMasternodes[mnIndex];
+       CScript pubkey;
+       pubkey = GetScriptForDestination(mn.pubkey.GetID());
+       CTxDestination address1;
+       ExtractDestination(pubkey, address1); 
+       activeItem = new QTableWidgetItem(mn.IsEnabled() ? tr("yes") : tr("no"));
+	   addressItem = new QTableWidgetItem(QString::fromStdString(mn.addr.ToString()));
+	   rankItem = new QTableWidgetItem(QString::number(GetMasternodeRank(mn.vin, chainActive.Height())));
+	   activeSecondsItem = new QTableWidgetItem(seconds_to_DHMS((qint64)(mn.lastTimeSeen - mn.now)));
+	   lastSeenItem = new QTableWidgetItem(QString::fromStdString(DateTimeStrFormat("%Y-%m-%d %H:%M:%S", mn.lastTimeSeen)));
+	   pubkeyItem = new QTableWidgetItem(QString::fromStdString(EncodeDestination(address1)));
+    }
+
+             
+    
+
+	ui->tableWidgetMy->setItem(mnRow, 0, alias);
+	ui->tableWidgetMy->setItem(mnRow, 1, addressItem);
+	ui->tableWidgetMy->setItem(mnRow, 2, rankItem);
+	ui->tableWidgetMy->setItem(mnRow, 3, activeItem);
+	ui->tableWidgetMy->setItem(mnRow, 4, activeSecondsItem);
+	ui->tableWidgetMy->setItem(mnRow, 5, lastSeenItem);
+	ui->tableWidgetMy->setItem(mnRow, 6, pubkeyItem);
+    }
+
+    ui->myCountTable->setText(QString::number(ui->tableWidgetMy->rowCount()));
+
+
 }
 
 void MasternodeManager::setClientModel(ClientModel *model)

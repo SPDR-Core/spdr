@@ -598,8 +598,7 @@ UniValue masternode(const UniValue& params, bool fHelp) {
     }
 
     if (strCommand == "list-conf") {
-        std::vector<CMasternodeConfig::CMasternodeEntry> mnEntries;
-        mnEntries = masternodeConfig.getEntries();
+
 
         UniValue resultObj(UniValue::VOBJ);
 

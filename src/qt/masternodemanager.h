@@ -39,12 +39,14 @@ public:
 
 public slots:
     void updateNodeList();
+    void updateMYNodeList();
     void updateSpiderNode(QString alias, QString addr, QString privkey, QString collateral);
-    
+        
 Q_SIGNALS:
 
 private:
     QTimer *timer;
+    QTimer *timer2;
     Ui::MasternodeManager *ui;
     ClientModel *clientModel;
     WalletModel *walletModel;
