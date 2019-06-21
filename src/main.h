@@ -94,14 +94,15 @@ struct CNodeStateStats;
 #endif
 
 #ifndef WORKING_VERSION
-#define WORKING_VERSION "/Spidercore:1.1.0/"
+#define WORKING_VERSION "/Spidercore:1.2.0/"
 #endif
 
 static const int64_t DARKSEND_COLLATERAL = (7000*COIN); //7000 SPDR
 static const int64_t DARKSEND_FEE = (0.002*COIN); // reward masternode
 static const int64_t DARKSEND_POOL_MAX = (1999999.99*COIN);
 
-static const int nSpiderProtocolSwitchHeight = 45000;
+static const int nSpiderProtocolSwitchHeight = 145000;
+static const int nSpiderStakeProtocolSwitchHeight = 45000;
 
 static const std::set<std::string> BadAddr = {
     "STKDpb8E8onLEYi3S9kF3YqMgBA5NRqPRK",
@@ -188,6 +189,7 @@ static const bool DEFAULT_ADDRESSINDEX = false;
 static const bool DEFAULT_SPENTINDEX = false;
 static const bool DEFAULT_TXINDEX = true;
 
+static const int64_t DEFAULT_MAX_TIP_AGE = 6 * 60 * 60; // ~144 blocks behind -> 2 x fork detection time, was 24 * 60 * 60 in bitcoin
 
 static const bool DEFAULT_LOGEVENTS = false;
 

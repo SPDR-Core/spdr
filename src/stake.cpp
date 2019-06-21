@@ -613,7 +613,7 @@ bool Stake::CheckHashNew(const CBlockIndex* pindexPrev, unsigned int nBits, cons
 bool Stake::CheckHash(const CBlockIndex* pindexPrev, unsigned int nBits, const CBlock& blockFrom, const CTransaction& txPrev, const COutPoint& prevout, unsigned int& nTimeTx, uint256& hashProofOfStake) {
 
     const int nBlockHeight = (pindexPrev ? pindexPrev->nHeight : chainActive.Height()) + 1;
-    const int nNewPoSHeight = IsTestNet() ? nSpiderProtocolSwitchHeightTestnet : nSpiderProtocolSwitchHeight;
+    const int nNewPoSHeight = IsTestNet() ? nSpiderProtocolSwitchHeightTestnet : nSpiderStakeProtocolSwitchHeight;
     if (nBlockHeight < nNewPoSHeight) // could be skipped if height < last checkpoint
         return CheckHashOld(pindexPrev, nBits, blockFrom, txPrev, prevout, nTimeTx, hashProofOfStake);
     return CheckHashNew(pindexPrev, nBits, blockFrom, txPrev, prevout, nTimeTx, hashProofOfStake);
@@ -784,7 +784,7 @@ bool Stake::CheckProof(CBlockIndex* const pindexPrev, const CBlock &block, uint2
     unsigned int nTime = block.nTime;
     
 #ifndef POS_DEBUG
-    const int nNewPoSHeight = IsTestNet() ? nSpiderProtocolSwitchHeightTestnet : nSpiderProtocolSwitchHeight;
+    const int nNewPoSHeight = IsTestNet() ? nSpiderProtocolSwitchHeightTestnet : nSpiderStakeProtocolSwitchHeight;
     if (nBlockHeight >= nNewPoSHeight)
 #endif
     {
