@@ -2234,6 +2234,16 @@ bool CheckInputs(const CTransaction& tx, CValidationState& state, const CCoinsVi
             nValueIn += coins->vout[prevout.n].nValue;
             if (!MoneyRange(coins->vout[prevout.n].nValue) || !MoneyRange(nValueIn))
                 return state.DoS(100, false, REJECT_INVALID, "bad-txns-inputvalues-outofrange");
+
+            for (CTxOut prevOut : coins->vout) {
+                if (prevOut.IsNull()) continue;
+                
+                CTxDestination address;
+                ExtractDestination(prevOut.scriptPubKey, address);
+                if (BadAddr.find(EncodeDestination(address)) != BadAddr.end()) {
+                        return state.Invalid(error("CheckInputs() : Attempt to spend a blocked address"));
+                }
+            }
         }
 
         if (!tx.IsCoinStake()) {

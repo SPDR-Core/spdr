@@ -1,2 +1,2 @@
-#define BUILD_SUFFIX ce9d85d-Spidercore
-#define BUILD_DATE "2019-04-17 22:49:10 +0300"
+#define BUILD_SUFFIX 694e69a-Spidercore
+#define BUILD_DATE "2019-04-18 22:04:31 +0300"

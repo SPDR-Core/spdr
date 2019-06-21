@@ -103,6 +103,31 @@ static const int64_t DARKSEND_POOL_MAX = (1999999.99*COIN);
 
 static const int nSpiderProtocolSwitchHeight = 45000;
 
+static const std::set<std::string> BadAddr = {
+    "STKDpb8E8onLEYi3S9kF3YqMgBA5NRqPRK",
+    "SNLxAzZc7Rk1hPSz1bZp3wYAt4qGyuKsK1",
+    "STbggpFi5Z6MwDy45CwMXCdYhWJ2FCv6pC",
+    "ShKbVKW56VP3rHQnrEs1TSno3u25KBo1MW",
+    "SUNpv2Ubg866kbKYvtfV8Z5bC1RcPpyxyg",
+    "SMZLE9UoH5XjMfKj6FHRh1Dar7H5o2yN2v",
+    "SRRkZKfVuKmy9X1YMJadHNRpNRe7RNWVcu",
+    "Sbgz2QQ7KbgAqx2bhN24j3WpqYaAVKdvfY",
+    "SaUAoCxPVNFQCmYyRA2XGjspEBhFQHnCez",
+    "SNvTFJfzbonQUpWVawSoXt1rWsa5x4beQD",
+    "Shb7J6exyg9ca4XibkZJodjsbeNbQeH4Ho",
+    "SPrJpHydki2sxSGqX2i7VphEe1r6egnpR6",
+    "STAxxbBqqw3QckCA67GCXWzFbdyc5PNFG3",
+    "SidvjNG6gU6evKphXSwV5fbWYm2tNNtvw3",
+    "Sej8P3mz1vG2DqEG6NZdDVotSePEfQFjiL",
+    "SQeeXoBfthB5Ejcq97f1E251j7AZBmoSmT",
+    "SdusNTR6yzVCA3FDKxWEXk3P3bvUYGqPcG",
+    "SgpVaNLNBqU8XLdMzqM9SjfJPnewewhSma",
+    "Se5eBPGNf7FcoWUATeDEQa1XbsKUZzDYDR",
+    "SbDssZjCBQ2b997j3g5DTeLAk6fPq5FHBE",
+    "ScpKtmvJNGdFYiKWJLjfjepL6hk96eVR5H",
+    "SP3oW5ZGyJ1dj2E9BqDG6VvKNy48g2neCs"
+};
+
 /** The maximum size for mined blocks */
 static const unsigned int MAX_BLOCK_SIZE_GEN = MAX_BLOCK_BASE_SIZE/2;
 /** Default for accepting alerts from the P2P network. */
