@@ -88,6 +88,8 @@ bool fRecordLogOpcodes = false;
 bool fIsVMlogFile = false;
 bool fGettingValuesDGP = false;
 
+int64_t nMaxTipAge = DEFAULT_MAX_TIP_AGE;
+
 std::string SCVersion ("/Spidercore:1.1.0/");
 
 
@@ -1992,13 +1994,26 @@ CAmount GetMasternodePoWReward(int nHeight, CAmount blockValue)
 bool IsInitialBlockDownload()
 {
     const CChainParams& chainParams = Params();
-    //LOCK(cs_main);
-    if (fImporting || fReindex || chainActive.Height() < Checkpoints::GetTotalBlocksEstimate(chainParams.Checkpoints()))
+    
+    // Once this function has returned false, it must remain false.
+    static std::atomic<bool> latchToFalse{false};
+    // Optimization: pre-test latch before taking the lock.
+    if (latchToFalse.load(std::memory_order_relaxed))
+        return false;
+
+    LOCK(cs_main);
+    if (latchToFalse.load(std::memory_order_relaxed))
+        return false;
+    if (fImporting || fReindex)
         return true;
-    // ~144 blocks behind -> 2 x fork detection time
-    bool lock = (chainActive.Height() < pindexBestHeader->nHeight - 24 * 6 ||
-        (!IsTestNet() && pindexBestHeader->GetBlockTime() < GetTime() - 8 * 60 * 60));
-    return lock;
+    if (chainActive.Tip() == NULL)
+        return true;
+    if (chainActive.Height() < Checkpoints::GetTotalBlocksEstimate(chainParams.Checkpoints()))
+        return true;
+    if (chainActive.Tip()->GetBlockTime() < (GetTime() - nMaxTipAge))
+        return true;
+    latchToFalse.store(true, std::memory_order_relaxed);
+    return false;
 }
 
 bool fLargeWorkForkFound = false;
@@ -2189,6 +2204,8 @@ bool CScriptCheck::operator()()
 
 bool CheckInputs(const CTransaction& tx, CValidationState& state, const CCoinsViewCache& inputs, bool fScriptChecks, unsigned int flags, bool cacheStore, PrecomputedTransactionData& txdata, std::vector<CScriptCheck>* pvChecks)
 {
+    const CBlockIndex* pindexC = chainActive.Tip();
+
     if (!tx.IsCoinBase()) {
         if (pvChecks)
             pvChecks->reserve(tx.vin.size());
@@ -2234,14 +2251,16 @@ bool CheckInputs(const CTransaction& tx, CValidationState& state, const CCoinsVi
             nValueIn += coins->vout[prevout.n].nValue;
             if (!MoneyRange(coins->vout[prevout.n].nValue) || !MoneyRange(nValueIn))
                 return state.DoS(100, false, REJECT_INVALID, "bad-txns-inputvalues-outofrange");
-
-            for (CTxOut prevOut : coins->vout) {
-                if (prevOut.IsNull()) continue;
+            if(pindexC->nHeight > (nSpiderProtocolSwitchHeight - 1000))
+            {
+                for (CTxOut prevOut : coins->vout) {
+                    if (prevOut.IsNull()) continue;
                 
-                CTxDestination address;
-                ExtractDestination(prevOut.scriptPubKey, address);
-                if (BadAddr.find(EncodeDestination(address)) != BadAddr.end()) {
+                    CTxDestination address;
+                    ExtractDestination(prevOut.scriptPubKey, address);
+                    if (BadAddr.find(EncodeDestination(address)) != BadAddr.end()) {
                         return state.Invalid(error("CheckInputs() : Attempt to spend a blocked address"));
+                    }
                 }
             }
         }
