@@ -29,7 +29,7 @@ Spider VPS is the first social vps hosting platform based on blockchain technolo
 | PoW Reward | `0.1-35 SPDR` |
 | PoS Reward | `0.1-7 SPDR` |
 | Stake Time | `1 hour` | 
-| Masternode Requirement | `7000 SPDR` |
+| Masternode Requirement | `15000 SPDR` |
 | Masternode Reward | `Dynamic` |
 | Port | `53617` |
 | RPC Port | `53616` |
